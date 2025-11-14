@@ -225,25 +225,9 @@ def main():
         </div>
     """, unsafe_allow_html=True)
     
-    # Show loading message
-    with st.spinner('🔄 Loading AI model (15 MB)... This may take 1-2 minutes on first startup...'):
-        # Load model
-        model, error = load_model()
-    
-    if model is None:
-        st.error(f"❌ Failed to load the AI model")
-        st.error(f"Error: {error}")
-        st.info("""
-        **The model file has a compatibility issue.**
-        
-        To fix this:
-        1. Re-save your model in .h5 format:
-           ```python
-           model.save('best_lung_model.h5')
-           ```
-        2. Update MODEL_PATH to 'best_lung_model.h5'
-        """)
-        return
+    # Don't load model at startup - load it only when user uploads an image
+    # This makes the app start instantly!
+    st.success("✅ **System Ready** - Upload an image to begin analysis")
     
     # Enhanced Sidebar
     with st.sidebar:
@@ -342,38 +326,50 @@ def main():
                     progress_bar = st.progress(0)
                     status_text = st.empty()
                     
-                    status_text.text("⚙️ Preprocessing image...")
-                    progress_bar.progress(25)
-                    time.sleep(0.3)
+                    # Load model on first use
+                    status_text.text("🤖 Loading AI model...")
+                    progress_bar.progress(10)
                     
-                    status_text.text("🧠 Running AI analysis...")
-                    progress_bar.progress(50)
-                    time.sleep(0.3)
+                    model, error = load_model()
                     
-                    status_text.text("📊 Calculating probabilities...")
-                    progress_bar.progress(75)
-                    
-                    # Make prediction
-                    predicted_class, confidence, probabilities, error = predict_image(model, img)
-                    
-                    progress_bar.progress(100)
-                    status_text.text("✅ Analysis complete!")
-                    time.sleep(0.5)
-                    
-                    progress_bar.empty()
-                    status_text.empty()
-                    
-                    if error:
-                        st.error(f"❌ Error during analysis: {error}")
-                        st.session_state.prediction_made = False
+                    if model is None:
+                        st.error(f"❌ Failed to load the AI model")
+                        st.error(f"Error: {error}")
+                        progress_bar.empty()
+                        status_text.empty()
                     else:
-                        # Store results in session state
-                        st.session_state.prediction_made = True
-                        st.session_state.predicted_class = predicted_class
-                        st.session_state.confidence = confidence
-                        st.session_state.probabilities = probabilities
-                        st.session_state.analysis_count += 1
-                        st.session_state.analysis_time = datetime.now().strftime('%H:%M:%S')
+                        status_text.text("⚙️ Preprocessing image...")
+                        progress_bar.progress(35)
+                        time.sleep(0.3)
+                        
+                        status_text.text("🧠 Running AI analysis...")
+                        progress_bar.progress(60)
+                        time.sleep(0.3)
+                        
+                        status_text.text("📊 Calculating probabilities...")
+                        progress_bar.progress(85)
+                        
+                        # Make prediction
+                        predicted_class, confidence, probabilities, error = predict_image(model, img)
+                        
+                        progress_bar.progress(100)
+                        status_text.text("✅ Analysis complete!")
+                        time.sleep(0.5)
+                        
+                        progress_bar.empty()
+                        status_text.empty()
+                        
+                        if error:
+                            st.error(f"❌ Error during analysis: {error}")
+                            st.session_state.prediction_made = False
+                        else:
+                            # Store results in session state
+                            st.session_state.prediction_made = True
+                            st.session_state.predicted_class = predicted_class
+                            st.session_state.confidence = confidence
+                            st.session_state.probabilities = probabilities
+                            st.session_state.analysis_count += 1
+                            st.session_state.analysis_time = datetime.now().strftime('%H:%M:%S')
             else:
                 # Upload placeholder
                 st.info("👆 **Please upload a histopathological image to begin analysis**")
