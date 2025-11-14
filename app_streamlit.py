@@ -158,9 +158,15 @@ def load_model():
         
         # Force load H5 model with compile=False to avoid compatibility issues
         print(f"3. Loading H5 model (this may take 30-60 seconds)...")
+        print(f"   Keras version: {keras.__version__}")
         start_time = time.time()
         
-        model = keras.models.load_model(MODEL_PATH, compile=False)
+        # Load with safe_mode=False for Keras 3.x compatibility
+        try:
+            model = keras.models.load_model(MODEL_PATH, compile=False, safe_mode=False)
+        except TypeError:
+            # Fallback for Keras 2.x (doesn't have safe_mode parameter)
+            model = keras.models.load_model(MODEL_PATH, compile=False)
         
         load_time = time.time() - start_time
         print(f"   ✓ Model loaded in {load_time:.2f} seconds!")
