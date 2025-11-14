@@ -158,7 +158,10 @@ def load_model():
         
         # Force load H5 model with compile=False to avoid compatibility issues
         print(f"3. Loading H5 model (this may take 30-60 seconds)...")
-        print(f"   Keras version: {keras.__version__}")
+        try:
+            print(f"   Keras version: {keras.__version__}")
+        except AttributeError:
+            print(f"   Keras version: 3.x (from TensorFlow {tf.__version__})")
         start_time = time.time()
         
         # Load with safe_mode=False for Keras 3.x compatibility
