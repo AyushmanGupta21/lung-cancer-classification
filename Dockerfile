@@ -21,9 +21,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app_streamlit.py .
 COPY best_lung_model.h5 .
 
-# Create .streamlit directory and copy config if it exists
-COPY .streamlit/ .streamlit/ 2>/dev/null || true
-
 # Expose Streamlit port
 EXPOSE 8501
 
