@@ -28,7 +28,7 @@ st.set_page_config(
 )
 
 # Configuration
-MODEL_PATH = 'best_lung_model.h5'
+MODEL_PATH = 'best_lung_model_v2.h5'  # Keras 3.x compatible version
 IMG_SIZE = (150, 150)  # Model expects 150x150x3 input
 CLASS_NAMES = ['Adenocarcinoma', 'Normal', 'Squamous Cell Carcinoma']
 
@@ -141,7 +141,7 @@ def load_model():
             print(f"   ⚠️ Model file not found locally. Downloading from GitHub...")
             
             # GitHub raw URL for the model file
-            model_url = "https://github.com/AyushmanGupta21/lung-cancer-classification/raw/main/best_lung_model.h5"
+            model_url = "https://github.com/AyushmanGupta21/lung-cancer-classification/raw/main/best_lung_model_v2.h5"
             
             try:
                 print(f"   📥 Downloading model (15.1 MB)... This may take 30-60 seconds...")
@@ -294,12 +294,12 @@ def main():
         
         with st.expander("📊 Model Details", expanded=False):
             st.markdown(f"""
-            - **Architecture**: Custom CNN
+            - **Architecture**: Custom CNN with BatchNorm
             - **Input Size**: {IMG_SIZE[0]}×{IMG_SIZE[1]} pixels
-            - **Parameters**: 3.7M
+            - **Parameters**: 1.24M
             - **Accuracy**: 100% on test set
             - **Classes**: {len(CLASS_NAMES)}
-            - **Framework**: TensorFlow + Keras
+            - **Framework**: TensorFlow + Keras 3.x
             """)
         
         st.markdown("---")
@@ -602,8 +602,8 @@ def main():
                 - Architecture: Custom CNN with batch normalization
                 - Training Images: 15,000 (5,000 per class)
                 - Test Accuracy: 100%
-                - Parameters: 3.7 million
-                - Framework: TensorFlow + Keras 3.12
+                - Parameters: 1.24 million
+                - Framework: TensorFlow + Keras 3.x compatible
                 
                 **Classification Categories:**
                 1. Adenocarcinoma
