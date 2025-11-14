@@ -128,17 +128,29 @@ st.markdown("""
 def load_model():
     """Load the trained model (cached)"""
     import os
+    import urllib.request
     
     print(f"\n{'='*60}")
     print(f"STARTING MODEL LOAD PROCESS")
     print(f"{'='*60}")
     
     try:
-        # Check if model file exists
+        # Check if model file exists locally, if not download it
         print(f"1. Checking if model file exists: {MODEL_PATH}")
         if not os.path.exists(MODEL_PATH):
-            raise FileNotFoundError(f"Model file not found: {MODEL_PATH}")
-        print(f"   ✓ Model file found!")
+            print(f"   ⚠️ Model file not found locally. Downloading from GitHub...")
+            
+            # GitHub raw URL for the model file
+            model_url = "https://github.com/AyushmanGupta21/lung-cancer-classification/raw/main/best_lung_model.h5"
+            
+            try:
+                print(f"   📥 Downloading model (15.1 MB)... This may take 30-60 seconds...")
+                urllib.request.urlretrieve(model_url, MODEL_PATH)
+                print(f"   ✓ Model downloaded successfully!")
+            except Exception as download_error:
+                raise FileNotFoundError(f"Failed to download model: {str(download_error)}")
+        else:
+            print(f"   ✓ Model file found!")
         
         # Get model file size
         model_size = os.path.getsize(MODEL_PATH) / (1024 * 1024)  # MB
