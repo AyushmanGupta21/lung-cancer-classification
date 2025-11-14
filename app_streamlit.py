@@ -10,6 +10,15 @@ import tensorflow as tf
 from tensorflow import keras
 import time
 from datetime import datetime
+import sys
+
+# Print startup info to logs
+print(f"=" * 60)
+print(f"Python version: {sys.version}")
+print(f"TensorFlow version: {tf.__version__}")
+print(f"Streamlit version: {st.__version__}")
+print(f"Starting model load at: {datetime.now()}")
+print(f"=" * 60)
 
 # Page configuration
 st.set_page_config(
@@ -115,21 +124,60 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Cache the model loading
-@st.cache_resource(show_spinner=False)
+@st.cache_resource(show_spinner=True)
 def load_model():
     """Load the trained model (cached)"""
+    import os
+    
+    print(f"\n{'='*60}")
+    print(f"STARTING MODEL LOAD PROCESS")
+    print(f"{'='*60}")
+    
     try:
+        # Check if model file exists
+        print(f"1. Checking if model file exists: {MODEL_PATH}")
+        if not os.path.exists(MODEL_PATH):
+            raise FileNotFoundError(f"Model file not found: {MODEL_PATH}")
+        print(f"   ✓ Model file found!")
+        
+        # Get model file size
+        model_size = os.path.getsize(MODEL_PATH) / (1024 * 1024)  # MB
+        print(f"2. Model file size: {model_size:.2f} MB")
+        
         # Force load H5 model with compile=False to avoid compatibility issues
+        print(f"3. Loading H5 model (this may take 30-60 seconds)...")
+        start_time = time.time()
+        
         model = keras.models.load_model(MODEL_PATH, compile=False)
+        
+        load_time = time.time() - start_time
+        print(f"   ✓ Model loaded in {load_time:.2f} seconds!")
+        print(f"   Model input shape: {model.input_shape}")
+        print(f"   Model output shape: {model.output_shape}")
+        
         # Recompile model
+        print(f"4. Recompiling model...")
         model.compile(
             optimizer='adam',
             loss='sparse_categorical_crossentropy',
             metrics=['accuracy']
         )
+        print(f"   ✓ Model compiled successfully!")
+        
+        print(f"{'='*60}")
+        print(f"MODEL LOAD COMPLETE - READY TO USE")
+        print(f"{'='*60}\n")
+        
         return model, None
+        
     except Exception as e:
-        return None, str(e)
+        error_msg = str(e)
+        print(f"\n{'='*60}")
+        print(f"❌ ERROR LOADING MODEL")
+        print(f"{'='*60}")
+        print(f"Error: {error_msg}")
+        print(f"{'='*60}\n")
+        return None, error_msg
 
 
 def predict_image(model, img):
@@ -177,8 +225,10 @@ def main():
         </div>
     """, unsafe_allow_html=True)
     
-    # Load model
-    model, error = load_model()
+    # Show loading message
+    with st.spinner('🔄 Loading AI model (15 MB)... This may take 1-2 minutes on first startup...'):
+        # Load model
+        model, error = load_model()
     
     if model is None:
         st.error(f"❌ Failed to load the AI model")
