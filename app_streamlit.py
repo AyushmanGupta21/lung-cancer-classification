@@ -115,11 +115,18 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Cache the model loading
-@st.cache_resource
+@st.cache_resource(show_spinner=False)
 def load_model():
     """Load the trained model (cached)"""
     try:
-        model = keras.models.load_model(MODEL_PATH)
+        # Force load H5 model with compile=False to avoid compatibility issues
+        model = keras.models.load_model(MODEL_PATH, compile=False)
+        # Recompile model
+        model.compile(
+            optimizer='adam',
+            loss='sparse_categorical_crossentropy',
+            metrics=['accuracy']
+        )
         return model, None
     except Exception as e:
         return None, str(e)
