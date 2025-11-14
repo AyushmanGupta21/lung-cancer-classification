@@ -19,7 +19,7 @@ st.set_page_config(
 )
 
 # Configuration
-MODEL_PATH = 'best_lung_model.keras'
+MODEL_PATH = 'best_lung_model.h5'
 IMG_SIZE = (150, 150)  # Model expects 150x150x3 input
 CLASS_NAMES = ['Adenocarcinoma', 'Normal', 'Squamous Cell Carcinoma']
 
