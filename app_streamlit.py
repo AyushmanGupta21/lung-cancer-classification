@@ -165,11 +165,44 @@ def load_model():
         start_time = time.time()
         
         # Load with safe_mode=False for Keras 3.x compatibility
+        # Try multiple loading strategies for cross-version compatibility
+        model = None
+        load_errors = []
+        
+        # Strategy 1: Try with safe_mode=False (Keras 3.x)
         try:
+            print(f"   Attempting load with safe_mode=False...")
             model = keras.models.load_model(MODEL_PATH, compile=False, safe_mode=False)
-        except TypeError:
-            # Fallback for Keras 2.x (doesn't have safe_mode parameter)
-            model = keras.models.load_model(MODEL_PATH, compile=False)
+            print(f"   ✓ Loaded successfully with safe_mode=False")
+        except Exception as e1:
+            load_errors.append(f"safe_mode=False: {str(e1)}")
+            print(f"   ✗ Failed with safe_mode=False: {str(e1)[:100]}")
+            
+            # Strategy 2: Try without safe_mode parameter (Keras 2.x)
+            try:
+                print(f"   Attempting load without safe_mode...")
+                model = keras.models.load_model(MODEL_PATH, compile=False)
+                print(f"   ✓ Loaded successfully without safe_mode")
+            except Exception as e2:
+                load_errors.append(f"no safe_mode: {str(e2)}")
+                print(f"   ✗ Failed without safe_mode: {str(e2)[:100]}")
+                
+                # Strategy 3: Try loading with TensorFlow's load_model (legacy format)
+                try:
+                    print(f"   Attempting load with tf.keras.models.load_model...")
+                    import h5py
+                    model = tf.keras.models.load_model(MODEL_PATH, compile=False)
+                    print(f"   ✓ Loaded successfully with tf.keras")
+                except Exception as e3:
+                    load_errors.append(f"tf.keras: {str(e3)}")
+                    print(f"   ✗ Failed with tf.keras: {str(e3)[:100]}")
+                    
+                    # All strategies failed
+                    error_summary = "\n".join([f"  - {err}" for err in load_errors])
+                    raise RuntimeError(f"Failed to load model with all strategies:\n{error_summary}")
+        
+        if model is None:
+            raise RuntimeError("Model loading failed - model is None")
         
         load_time = time.time() - start_time
         print(f"   ✓ Model loaded in {load_time:.2f} seconds!")
