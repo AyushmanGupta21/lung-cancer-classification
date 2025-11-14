@@ -6,8 +6,8 @@ Professional medical-grade interface for histopathological image analysis
 import streamlit as st
 import numpy as np
 from PIL import Image
+import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras.preprocessing import image as keras_image
 import time
 from datetime import datetime
 
@@ -132,7 +132,7 @@ def predict_image(model, img):
         img_resized = img.resize(IMG_SIZE)
         
         # Convert to array
-        img_array = keras_image.img_to_array(img_resized)
+        img_array = np.array(img_resized, dtype=np.float32)
         
         # Add batch dimension
         img_array = np.expand_dims(img_array, axis=0)
