@@ -1,32 +1,58 @@
-# 🏥 Lung Cancer Classification System
+---
+title: Lung Cancer AI Diagnosis
+emoji: 🫁
+colorFrom: blue
+colorTo: purple
+sdk: docker
+pinned: false
+license: mit
+---
 
-AI-powered web application for classifying lung histopathological images into three categories:
-- **Adenocarcinoma** (Lung cancer type 1)
-- **Normal** (Healthy lung tissue)
-- **Squamous Cell Carcinoma** (Lung cancer type 2)
+# 🫁 Lung Cancer AI Diagnosis System
+
+Advanced Deep Learning system for histopathological lung cancer image analysis using Convolutional Neural Networks.
 
 ## 🎯 Features
 
-- ✅ **High Accuracy**: 100% accuracy on test dataset
-- 🖼️ **Easy Upload**: Drag-and-drop interface for doctors
-- ⚡ **Real-time Analysis**: Instant classification results
-- 📊 **Confidence Scores**: Detailed probability breakdown
-- 🎨 **Professional UI**: Clean, medical-grade interface
+- **AI-Powered Classification**: Analyzes histopathological lung tissue images
+- **3 Classification Categories**:
+  - 🔴 Adenocarcinoma
+  - 🟠 Squamous Cell Carcinoma  
+  - 🟢 Normal Tissue
+- **Professional Medical Interface**: Clean, intuitive UI designed for medical professionals
+- **Detailed Analysis**: Confidence scores and probability distributions
+- **Report Generation**: Downloadable diagnostic reports
+- **Real-time Processing**: Instant AI predictions
 
-## 🚀 Model Performance
+## 🧠 Model Specifications
 
-- **Architecture**: Custom CNN with batch normalization and dropout
-- **Input Size**: 150x150x3 (RGB images)
-- **Total Parameters**: 3.7M (14.21 MB)
-- **Trainable Parameters**: 1.2M (4.73 MB)
+- **Architecture**: Custom Convolutional Neural Network (CNN)
+- **Training Dataset**: 15,000 histopathological images (5,000 per class)
 - **Test Accuracy**: 100%
+- **Parameters**: 3.7 million
+- **Input Size**: 150×150 pixels
+- **Framework**: TensorFlow 2.15 + Keras
+
+## 🚀 How to Use
+
+1. **Upload Image**: Click to upload a histopathological lung tissue image (PNG, JPG, JPEG, WEBP)
+2. **Analyze**: Click "Start AI Analysis" button
+3. **Review Results**: View predicted diagnosis with confidence level
+4. **Generate Report**: Download detailed diagnostic report
+
+## 📊 Performance Metrics
+
+- Overall Accuracy: **100%**
+- Adenocarcinoma Detection: **100%**
+- Squamous Cell Carcinoma Detection: **100%**
+- Normal Tissue Detection: **100%**
 
 ## 💻 Local Installation
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
-cd lung_cancer
+git clone https://github.com/AyushmanGupta21/lung-cancer-classification
+cd lung-cancer-classification
 
 # Install dependencies
 pip install -r requirements.txt
@@ -35,18 +61,16 @@ pip install -r requirements.txt
 streamlit run app_streamlit.py
 ```
 
-## 📊 Dataset
-
-- **Total Images**: 15,000 histopathological images
-- **Classes**: 3 (5,000 images per class)
-- **Image Format**: JPEG
-- **Resolution**: 150x150 pixels
-
 ## ⚠️ Medical Disclaimer
 
-This tool is for educational and research purposes only. It should not be used as the sole basis for medical diagnosis. Always consult with qualified healthcare professionals for accurate medical diagnosis and treatment.
+This AI system is designed to **assist** medical professionals, not replace them.
 
-## 🔧 Technical Stack
+- Final diagnosis must be made by qualified pathologists
+- Consider patient history and additional clinical tests
+- Use as a second opinion tool only
+- Not approved for sole diagnostic use
+
+## �️ Technical Stack
 
 - **Framework**: TensorFlow 2.15.0 + Keras 3.12.0
 - **Frontend**: Streamlit
