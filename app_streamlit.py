@@ -321,7 +321,7 @@ def main():
             if uploaded_file is not None:
                 # Display uploaded image with enhanced styling
                 img = Image.open(uploaded_file)
-                st.image(img, caption=f'📁 {uploaded_file.name}', use_container_width=True)
+                st.image(img, caption=f'📁 {uploaded_file.name}', width='stretch')
                 
                 # Image info
                 col_info1, col_info2, col_info3 = st.columns(3)
@@ -338,7 +338,7 @@ def main():
                 analyze_btn = st.button(
                     "🔬 Start AI Analysis", 
                     type="primary", 
-                    use_container_width=True,
+                    width='stretch',
                     help="Click to analyze the uploaded image using AI"
                 )
                 
@@ -492,7 +492,7 @@ def main():
                 
                 # Export/Download results
                 st.markdown("---")
-                if st.button("📄 Generate Report", use_container_width=True):
+                if st.button("📄 Generate Report", width='stretch'):
                     report = f"""
                     LUNG CANCER AI DIAGNOSIS REPORT
                     ================================
@@ -523,7 +523,7 @@ def main():
                         data=report,
                         file_name=f"lung_cancer_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
                         mime="text/plain",
-                        use_container_width=True
+                        width='stretch'
                     )
                 
             else:
