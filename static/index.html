@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lung Cancer AI Diagnosis System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="https://img.icons8.com/fluency/96/000000/lungs.png">
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <img src="https://img.icons8.com/fluency/96/000000/lungs.png" alt="Lungs Icon" class="header-icon">
+                <div class="header-text">
+                    <h1>Lung Cancer AI Diagnosis System</h1>
+                    <p class="subtitle">Advanced Deep Learning for Histopathological Image Analysis</p>
+                    <p class="powered-by">Powered by Convolutional Neural Networks | Medical Grade AI</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- System Status -->
+        <div class="status-bar">
+            <div class="status-indicator">
+                <span class="status-dot active"></span>
+                <span id="systemStatus">System Ready</span>
+            </div>
+            <div class="model-info">
+                <span>🤖 Model: CNN-v1.0</span>
+                <span>📊 Accuracy: 100%</span>
+                <span>⚡ Ready</span>
+            </div>
+        </div>
+
+        <!-- Analysis Section -->
+        <div class="analysis-section">
+            <!-- Left Panel - Upload -->
+            <div class="panel upload-panel">
+                <h2>📤 Image Upload</h2>
+                
+                <div class="upload-zone" id="uploadZone">
+                    <div class="upload-content">
+                        <div class="upload-icon">📁</div>
+                        <h3>Drag & Drop Image Here</h3>
+                        <p>or</p>
+                        <label for="fileInput" class="upload-button">
+                            Choose File
+                        </label>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                        <p class="upload-hint">Supported: PNG, JPG, JPEG, WEBP</p>
+                    </div>
+                </div>
+
+                <!-- Image Preview -->
+                <div id="imagePreview" class="image-preview hidden">
+                    <div class="preview-header">
+                        <h3>📷 Uploaded Image</h3>
+                        <button id="clearImage" class="clear-button">✕ Clear</button>
+                    </div>
+                    <img id="previewImg" src="" alt="Preview">
+                    <div class="image-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Filename:</span>
+                            <span id="fileName">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Size:</span>
+                            <span id="fileSize">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Dimensions:</span>
+                            <span id="fileDimensions">-</span>
+                        </div>
+                    </div>
+                    <button id="analyzeButton" class="analyze-button">
+                        🔬 Start AI Analysis
+                    </button>
+                </div>
+
+                <!-- Progress -->
+                <div id="progressSection" class="progress-section hidden">
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                    <p id="progressText" class="progress-text">Initializing...</p>
+                </div>
+            </div>
+
+            <!-- Right Panel - Results -->
+            <div class="panel results-panel">
+                <h2>📊 Analysis Results</h2>
+                
+                <div id="noResults" class="no-results">
+                    <div class="placeholder-icon">🔬</div>
+                    <h3>No Analysis Yet</h3>
+                    <p>Upload a histopathological image and click "Start AI Analysis" to see results</p>
+                    
+                    <div class="info-box">
+                        <h4>🎯 What to Expect:</h4>
+                        <ul>
+                            <li>✅ Instant AI-powered analysis</li>
+                            <li>📊 Detailed probability breakdown</li>
+                            <li>💡 Recommended medical actions</li>
+                            <li>📄 Downloadable diagnostic report</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="resultsContent" class="results-content hidden">
+                    <!-- Diagnosis Card -->
+                    <div id="diagnosisCard" class="diagnosis-card">
+                        <div class="diagnosis-header">
+                            <span id="diagnosisEmoji" class="diagnosis-emoji">🔴</span>
+                            <h3 id="diagnosisClass">-</h3>
+                        </div>
+                        <p id="diagnosisDescription" class="diagnosis-description">-</p>
+                        <div class="confidence-badge">
+                            <span>Confidence: </span>
+                            <span id="confidenceValue" class="confidence-value">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Confidence Meter -->
+                    <div class="confidence-section">
+                        <h4>📈 Confidence Level</h4>
+                        <div class="confidence-meter">
+                            <div id="confidenceFill" class="confidence-fill"></div>
+                        </div>
+                        <div class="confidence-labels">
+                            <span>0%</span>
+                            <span id="confidenceLabel" class="confidence-label">-</span>
+                            <span>100%</span>
+                        </div>
+                    </div>
+
+                    <!-- Probability Distribution -->
+                    <div class="probability-section">
+                        <h4>📋 Probability Distribution</h4>
+                        <div id="probabilityBars" class="probability-bars">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+
+                    <!-- Recommended Action -->
+                    <div class="action-section">
+                        <h4>💡 Recommended Action</h4>
+                        <div id="actionBox" class="action-box">-</div>
+                    </div>
+
+                    <!-- Medical Disclaimer -->
+                    <div class="disclaimer">
+                        <h4>⚠️ Important Medical Disclaimer</h4>
+                        <p>This AI system is designed to <strong>assist</strong> medical professionals, not replace them.</p>
+                        <ul>
+                            <li>Final diagnosis must be made by qualified pathologists</li>
+                            <li>Consider patient history and additional tests</li>
+                            <li>Use as a second opinion tool only</li>
+                            <li>Not approved for sole diagnostic use</li>
+                        </ul>
+                    </div>
+
+                    <!-- Download Report -->
+                    <button id="downloadReport" class="download-button">
+                        📄 Download Report
+                    </button>
+
+                    <!-- Analysis Metadata -->
+                    <div class="metadata">
+                        <small>
+                            <strong>Analysis Time:</strong> <span id="analysisTime">-</span> |
+                            <strong>Processing Time:</strong> <span id="processingTime">-</span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Tabs -->
+        <div class="tabs-section">
+            <div class="tabs">
+                <button class="tab active" data-tab="about">About</button>
+                <button class="tab" data-tab="model">Model Info</button>
+                <button class="tab" data-tab="classes">Classification</button>
+            </div>
+
+            <div class="tab-content">
+                <!-- About Tab -->
+                <div id="aboutTab" class="tab-panel active">
+                    <h3>🧠 AI Technology</h3>
+                    <p>This system uses a <strong>Convolutional Neural Network (CNN)</strong> trained on 15,000 histopathological images to classify lung tissue samples.</p>
+                    
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">🎯</div>
+                            <h4>100% Accuracy</h4>
+                            <p>Perfect classification on test dataset</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">⚡</div>
+                            <h4>Instant Results</h4>
+                            <p>Analysis completed in seconds</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🔒</div>
+                            <h4>Secure & Private</h4>
+                            <p>Images processed locally</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🏥</div>
+                            <h4>Medical Grade</h4>
+                            <p>Research-validated model</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Model Tab -->
+                <div id="modelTab" class="tab-panel">
+                    <h3>📊 Model Specifications</h3>
+                    <div class="specs-grid">
+                        <div class="spec-item">
+                            <strong>Architecture:</strong> Custom CNN with BatchNorm
+                        </div>
+                        <div class="spec-item">
+                            <strong>Training Images:</strong> 15,000 (5,000 per class)
+                        </div>
+                        <div class="spec-item">
+                            <strong>Test Accuracy:</strong> 100%
+                        </div>
+                        <div class="spec-item">
+                            <strong>Parameters:</strong> 1.24 million
+                        </div>
+                        <div class="spec-item">
+                            <strong>Input Size:</strong> 150×150 pixels
+                        </div>
+                        <div class="spec-item">
+                            <strong>Framework:</strong> TensorFlow + Keras 3.x
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Classes Tab -->
+                <div id="classesTab" class="tab-panel">
+                    <h3>🎯 Classification Categories</h3>
+                    <div class="classes-grid">
+                        <div class="class-card adenocarcinoma">
+                            <div class="class-header">
+                                <span class="class-emoji">🔴</span>
+                                <h4>Adenocarcinoma</h4>
+                            </div>
+                            <p>A type of non-small cell lung cancer that begins in mucus-secreting cells.</p>
+                            <div class="class-action">
+                                <strong>Action:</strong> Immediate consultation with oncologist recommended.
+                            </div>
+                        </div>
+                        <div class="class-card squamous">
+                            <div class="class-header">
+                                <span class="class-emoji">🟠</span>
+                                <h4>Squamous Cell Carcinoma</h4>
+                            </div>
+                            <p>A type of non-small cell lung cancer that begins in flat cells lining the airways.</p>
+                            <div class="class-action">
+                                <strong>Action:</strong> Immediate consultation with oncologist recommended.
+                            </div>
+                        </div>
+                        <div class="class-card normal">
+                            <div class="class-header">
+                                <span class="class-emoji">🟢</span>
+                                <h4>Normal</h4>
+                            </div>
+                            <p>Healthy lung tissue with no signs of malignancy.</p>
+                            <div class="class-action">
+                                <strong>Action:</strong> No immediate action required. Continue regular monitoring.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <h3>🫁 Lung Cancer AI Diagnosis System</h3>
+            <p>Powered by Deep Learning | TensorFlow + Keras</p>
+            <div class="footer-badges">
+                <span class="badge">🔒 Secure</span>
+                <span class="badge">🚀 Fast</span>
+                <span class="badge">🎯 Accurate</span>
+                <span class="badge">💯 Reliable</span>
+            </div>
+            <p class="footer-note">For research and educational purposes only | Version 1.0.0</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

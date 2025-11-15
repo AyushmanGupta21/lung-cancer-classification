@@ -1,0 +1,880 @@
+/* ===================================
+   CSS Variables
+   =================================== */
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --success-color: #51CF66;
+    --warning-color: #FFD43B;
+    --danger-color: #FF6B6B;
+    --info-color: #339af0;
+    
+    --bg-light: #f8f9fa;
+    --bg-white: #ffffff;
+    --text-dark: #212529;
+    --text-muted: #6c757d;
+    --border-color: #dee2e6;
+    
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 8px 16px rgba(0,0,0,0.15);
+    
+    --border-radius: 12px;
+    --transition: all 0.3s ease;
+}
+
+/* ===================================
+   Global Styles
+   =================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    color: var(--text-dark);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ===================================
+   Header
+   =================================== */
+.main-header {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 2rem 0;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 2rem;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    text-align: center;
+}
+
+.header-icon {
+    width: 80px;
+    height: 80px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.header-text h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    opacity: 0.95;
+    margin-bottom: 0.3rem;
+}
+
+.powered-by {
+    font-size: 0.95rem;
+    opacity: 0.85;
+}
+
+/* ===================================
+   Status Bar
+   =================================== */
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-white);
+    padding: 1rem 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 2rem;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--text-muted);
+}
+
+.status-dot.active {
+    background: var(--success-color);
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.model-info {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* ===================================
+   Analysis Section
+   =================================== */
+.analysis-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.panel {
+    background: var(--bg-white);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+}
+
+.panel h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+}
+
+/* ===================================
+   Upload Zone
+   =================================== */
+.upload-zone {
+    border: 3px dashed #667eea;
+    border-radius: var(--border-radius);
+    padding: 3rem 2rem;
+    text-align: center;
+    background: linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.upload-zone:hover {
+    border-color: #764ba2;
+    background: linear-gradient(135deg, #e8ecff 0%, #d8e0ff 100%);
+    transform: translateY(-2px);
+}
+
+.upload-zone.dragover {
+    border-color: #51CF66;
+    background: linear-gradient(135deg, #e7ffe7 0%, #d0ffd0 100%);
+}
+
+.upload-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.upload-content h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: #667eea;
+}
+
+.upload-content p {
+    color: var(--text-muted);
+    margin: 0.5rem 0;
+}
+
+.upload-button {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background: var(--primary-gradient);
+    color: white;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    margin: 1rem 0;
+}
+
+.upload-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.upload-hint {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ===================================
+   Image Preview
+   =================================== */
+.image-preview {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.clear-button {
+    background: var(--danger-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.clear-button:hover {
+    background: #e85555;
+    transform: scale(1.05);
+}
+
+#previewImg {
+    width: 100%;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    margin-bottom: 1rem;
+}
+
+.image-details {
+    background: var(--bg-light);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.analyze-button {
+    width: 100%;
+    padding: 1rem;
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.analyze-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.analyze-button:active {
+    transform: translateY(0);
+}
+
+/* ===================================
+   Progress
+   =================================== */
+.progress-section {
+    margin-top: 1.5rem;
+    animation: fadeIn 0.3s ease;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-light);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--primary-gradient);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    text-align: center;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+/* ===================================
+   Results Panel
+   =================================== */
+.no-results {
+    text-align: center;
+    padding: 2rem;
+}
+
+.placeholder-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.no-results h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+}
+
+.no-results p {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+.info-box {
+    background: #e7f5ff;
+    border-left: 4px solid var(--info-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.info-box h4 {
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+.info-box ul {
+    list-style: none;
+    padding: 0;
+}
+
+.info-box li {
+    padding: 0.5rem 0;
+    color: var(--text-muted);
+}
+
+/* ===================================
+   Diagnosis Card
+   =================================== */
+.diagnosis-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    border-left: 5px solid;
+    margin-bottom: 1.5rem;
+    animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.diagnosis-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.diagnosis-emoji {
+    font-size: 3rem;
+}
+
+.diagnosis-header h3 {
+    font-size: 2rem;
+    color: var(--text-dark);
+}
+
+.diagnosis-description {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.confidence-badge {
+    display: inline-block;
+    background: var(--primary-gradient);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.confidence-value {
+    font-size: 1.2rem;
+}
+
+/* ===================================
+   Confidence Section
+   =================================== */
+.confidence-section {
+    margin-bottom: 1.5rem;
+}
+
+.confidence-section h4 {
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+.confidence-meter {
+    width: 100%;
+    height: 30px;
+    background: var(--bg-light);
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.confidence-fill {
+    height: 100%;
+    background: var(--primary-gradient);
+    width: 0%;
+    transition: width 1s ease;
+}
+
+.confidence-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.confidence-label {
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* ===================================
+   Probability Section
+   =================================== */
+.probability-section {
+    margin-bottom: 1.5rem;
+}
+
+.probability-section h4 {
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+.probability-bar-item {
+    margin-bottom: 1rem;
+}
+
+.probability-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.probability-name {
+    font-weight: 600;
+}
+
+.probability-name.predicted {
+    color: #667eea;
+}
+
+.probability-value {
+    font-weight: 600;
+}
+
+.probability-bar-container {
+    width: 100%;
+    height: 20px;
+    background: var(--bg-light);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.probability-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    width: 0%;
+    transition: width 0.8s ease;
+}
+
+/* ===================================
+   Action Section
+   =================================== */
+.action-section {
+    margin-bottom: 1.5rem;
+}
+
+.action-section h4 {
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+.action-box {
+    background: #fff3cd;
+    border-left: 4px solid var(--warning-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    color: var(--text-dark);
+}
+
+/* ===================================
+   Disclaimer
+   =================================== */
+.disclaimer {
+    background: #ffe0e0;
+    border-left: 4px solid var(--danger-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.disclaimer h4 {
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.disclaimer p {
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.disclaimer ul {
+    margin-left: 1.5rem;
+    color: var(--text-dark);
+}
+
+.disclaimer li {
+    margin: 0.3rem 0;
+}
+
+/* ===================================
+   Buttons
+   =================================== */
+.download-button {
+    width: 100%;
+    padding: 1rem;
+    background: var(--success-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-bottom: 1rem;
+}
+
+.download-button:hover {
+    background: #45b359;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* ===================================
+   Metadata
+   =================================== */
+.metadata {
+    text-align: center;
+    padding: 1rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+    color: var(--text-muted);
+}
+
+/* ===================================
+   Tabs Section
+   =================================== */
+.tabs-section {
+    background: var(--bg-white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.tabs {
+    display: flex;
+    background: var(--bg-light);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.tab {
+    flex: 1;
+    padding: 1rem;
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--text-muted);
+}
+
+.tab:hover {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.tab.active {
+    background: var(--primary-gradient);
+    color: white;
+}
+
+.tab-content {
+    padding: 2rem;
+}
+
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-panel h3 {
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+}
+
+/* ===================================
+   Feature Grid
+   =================================== */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.feature-card {
+    background: var(--bg-light);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.feature-card h4 {
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.feature-card p {
+    color: var(--text-muted);
+}
+
+/* ===================================
+   Specs Grid
+   =================================== */
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.spec-item {
+    background: var(--bg-light);
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+/* ===================================
+   Classes Grid
+   =================================== */
+.classes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.class-card {
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    border-left: 5px solid;
+    background: var(--bg-light);
+    transition: var(--transition);
+}
+
+.class-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.class-card.adenocarcinoma {
+    border-left-color: #FF6B6B;
+}
+
+.class-card.squamous {
+    border-left-color: #FF8C42;
+}
+
+.class-card.normal {
+    border-left-color: #51CF66;
+}
+
+.class-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.class-emoji {
+    font-size: 2rem;
+}
+
+.class-card h4 {
+    font-size: 1.3rem;
+    color: var(--text-dark);
+}
+
+.class-card p {
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+.class-action {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+/* ===================================
+   Footer
+   =================================== */
+.footer {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.footer h3 {
+    margin-bottom: 0.5rem;
+}
+
+.footer p {
+    margin: 0.5rem 0;
+    opacity: 0.9;
+}
+
+.footer-badges {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
+
+.badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.footer-note {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+/* ===================================
+   Utility Classes
+   =================================== */
+.hidden {
+    display: none !important;
+}
+
+/* ===================================
+   Responsive Design
+   =================================== */
+@media (max-width: 1024px) {
+    .analysis-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+    }
+    
+    .header-text h1 {
+        font-size: 1.8rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+    
+    .status-bar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .model-info {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .panel {
+        padding: 1.5rem;
+    }
+    
+    .tabs {
+        flex-direction: column;
+    }
+    
+    .feature-grid,
+    .specs-grid,
+    .classes-grid {
+        grid-template-columns: 1fr;
+    }
+}
