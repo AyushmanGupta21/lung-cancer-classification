@@ -1,423 +1,378 @@
-// ===================================
-// Global Variables
-// ===================================
-let uploadedFile = null;
-let currentResults = null;
+// MediScan AI - Professional Medical Dashboard JavaScript
 
-// ===================================
-// DOM Elements
-// ===================================
-const uploadZone = document.getElementById('uploadZone');
-const fileInput = document.getElementById('fileInput');
-const imagePreview = document.getElementById('imagePreview');
-const previewImg = document.getElementById('previewImg');
-const clearImageBtn = document.getElementById('clearImage');
-const analyzeButton = document.getElementById('analyzeButton');
-const progressSection = document.getElementById('progressSection');
-const progressFill = document.getElementById('progressFill');
-const progressText = document.getElementById('progressText');
-const noResults = document.getElementById('noResults');
-const resultsContent = document.getElementById('resultsContent');
+let uploadedImage = null;
+let analysisResults = null;
 
-// ===================================
-// File Upload Handlers
-// ===================================
-
-// Click to upload
-uploadZone.addEventListener('click', () => {
-    fileInput.click();
-});
-
-// File input change
-fileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        handleFileUpload(file);
+// Class information
+const classInfo = {
+    'Adenocarcinoma': {
+        color: '#EF4444',
+        emoji: '🔴',
+        description: 'A type of non-small cell lung cancer that begins in mucus-secreting cells.',
+        recommendation: 'Immediate consultation with oncologist recommended. Consider staging CT scan and molecular testing for targeted therapy options.'
+    },
+    'Squamous Cell Carcinoma': {
+        color: '#F59E0B',
+        emoji: '🟠',
+        description: 'A type of non-small cell lung cancer that begins in flat cells lining the airways.',
+        recommendation: 'Immediate consultation with oncologist recommended. Consider bronchoscopy and biopsy for confirmation. Assess for surgical intervention.'
+    },
+    'Normal': {
+        color: '#10B981',
+        emoji: '🟢',
+        description: 'Healthy lung tissue with no signs of malignancy detected.',
+        recommendation: 'No immediate action required. Continue regular monitoring and follow standard screening protocols for at-risk patients.'
     }
+};
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    setupEventListeners();
+    checkServerHealth();
 });
 
-// Drag and drop
-uploadZone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    uploadZone.classList.add('dragover');
-});
+function setupEventListeners() {
+    const imageInput = document.getElementById('imageInput');
+    const uploadBox = document.getElementById('uploadBox');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
 
-uploadZone.addEventListener('dragleave', () => {
-    uploadZone.classList.remove('dragover');
-});
+    // File input change
+    imageInput.addEventListener('change', handleImageUpload);
 
-uploadZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    uploadZone.classList.remove('dragover');
-    
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
-        handleFileUpload(file);
-    } else {
-        showError('Please upload a valid image file');
-    }
-});
+    // Drag and drop
+    uploadBox.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadBox.style.borderColor = 'var(--primary-green)';
+        uploadBox.style.background = 'rgba(16, 185, 129, 0.05)';
+    });
 
-// ===================================
-// File Upload Handler
-// ===================================
-function handleFileUpload(file) {
-    uploadedFile = file;
-    
-    // Show preview
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        previewImg.src = e.target.result;
+    uploadBox.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        uploadBox.style.borderColor = '';
+        uploadBox.style.background = '';
+    });
+
+    uploadBox.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadBox.style.borderColor = '';
+        uploadBox.style.background = '';
         
-        // Get image dimensions
-        const img = new Image();
-        img.onload = () => {
-            document.getElementById('fileName').textContent = file.name;
-            document.getElementById('fileSize').textContent = formatFileSize(file.size);
-            document.getElementById('fileDimensions').textContent = `${img.width} × ${img.height} px`;
-        };
-        img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-    
-    // Show preview section, hide upload zone
-    uploadZone.classList.add('hidden');
-    imagePreview.classList.remove('hidden');
-    
-    // Reset results
-    resetResults();
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            imageInput.files = files;
+            handleImageUpload();
+        }
+    });
+
+    // Analyze button
+    analyzeBtn.addEventListener('click', performAnalysis);
+
+    // Download button
+    downloadBtn.addEventListener('click', downloadReport);
 }
 
-// ===================================
-// Clear Image Handler
-// ===================================
-clearImageBtn.addEventListener('click', () => {
-    uploadedFile = null;
-    fileInput.value = '';
-    previewImg.src = '';
-    
-    // Hide preview, show upload zone
-    imagePreview.classList.add('hidden');
-    uploadZone.classList.remove('hidden');
-    
-    // Reset results
-    resetResults();
-});
+async function checkServerHealth() {
+    try {
+        const response = await fetch('/api/health');
+        const data = await response.json();
+        console.log('Server health:', data);
+    } catch (error) {
+        console.error('Server health check failed:', error);
+    }
+}
 
-// ===================================
-// Analyze Button Handler
-// ===================================
-analyzeButton.addEventListener('click', async () => {
-    if (!uploadedFile) {
-        showError('Please upload an image first');
+function handleImageUpload() {
+    const fileInput = document.getElementById('imageInput');
+    const file = fileInput.files[0];
+
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.match('image.*')) {
+        showNotification('Please upload an image file', 'error');
         return;
     }
+
+    // Validate file size (10MB)
+    if (file.size > 10 * 1024 * 1024) {
+        showNotification('File size must be less than 10MB', 'error');
+        return;
+    }
+
+    // Read and display image
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        uploadedImage = e.target.result;
+        displayImagePreview(uploadedImage);
+    };
+    reader.readAsDataURL(file);
+}
+
+function displayImagePreview(imageSrc) {
+    const uploadBox = document.getElementById('uploadBox');
+    const previewSection = document.getElementById('previewSection');
+    const imagePreview = document.getElementById('imagePreview');
+
+    imagePreview.src = imageSrc;
+    uploadBox.style.display = 'none';
+    previewSection.style.display = 'block';
+}
+
+function removeImage() {
+    const uploadBox = document.getElementById('uploadBox');
+    const previewSection = document.getElementById('previewSection');
+    const imageInput = document.getElementById('imageInput');
+
+    uploadedImage = null;
+    imageInput.value = '';
+    uploadBox.style.display = 'block';
+    previewSection.style.display = 'none';
+}
+
+async function performAnalysis() {
+    const fileInput = document.getElementById('imageInput');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        showNotification('Please upload an image first', 'error');
+        return;
+    }
+
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const originalText = analyzeBtn.innerHTML;
     
-    // Disable button
-    analyzeButton.disabled = true;
-    analyzeButton.textContent = '⏳ Analyzing...';
-    
-    // Show progress
-    progressSection.classList.remove('hidden');
-    
-    // Simulate progress steps
-    await updateProgress(10, '🤖 Loading AI model...');
-    await sleep(300);
-    
-    await updateProgress(35, '⚙️ Preprocessing image...');
-    await sleep(300);
-    
-    await updateProgress(60, '🧠 Running AI analysis...');
-    
-    // Make API call
+    // Show loading state
+    analyzeBtn.innerHTML = `
+        <svg class="loading" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+        </svg>
+        Analyzing...
+    `;
+    analyzeBtn.disabled = true;
+
     try {
         const formData = new FormData();
-        formData.append('file', uploadedFile);
-        
+        formData.append('file', file);
+
         const response = await fetch('/api/predict', {
             method: 'POST',
             body: formData
         });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            await updateProgress(85, '📊 Calculating probabilities...');
-            await sleep(300);
-            
-            await updateProgress(100, '✅ Analysis complete!');
-            await sleep(500);
-            
-            // Display results
-            displayResults(data);
-        } else {
-            throw new Error(data.error || 'Analysis failed');
-        }
-        
-    } catch (error) {
-        console.error('Error:', error);
-        showError(`Analysis failed: ${error.message}`);
-    } finally {
-        // Hide progress
-        progressSection.classList.add('hidden');
-        progressFill.style.width = '0%';
-        
-        // Re-enable button
-        analyzeButton.disabled = false;
-        analyzeButton.textContent = '🔬 Start AI Analysis';
-    }
-});
 
-// ===================================
-// Display Results
-// ===================================
-function displayResults(data) {
-    currentResults = data;
-    
-    // Hide no results, show results content
-    noResults.classList.add('hidden');
-    resultsContent.classList.remove('hidden');
-    
-    // Update diagnosis card
-    const classInfo = data.class_info;
-    document.getElementById('diagnosisEmoji').textContent = classInfo.emoji;
-    document.getElementById('diagnosisClass').textContent = data.predicted_class;
-    document.getElementById('diagnosisDescription').textContent = classInfo.description;
-    document.getElementById('confidenceValue').textContent = `${data.confidence}%`;
-    
-    // Set card border color
-    const diagnosisCard = document.getElementById('diagnosisCard');
-    diagnosisCard.style.borderLeftColor = classInfo.color;
-    
-    // Update confidence meter
-    const confidenceFill = document.getElementById('confidenceFill');
-    setTimeout(() => {
-        confidenceFill.style.width = `${data.confidence}%`;
-    }, 100);
-    
-    // Set confidence color based on value
-    if (data.confidence >= 90) {
-        confidenceFill.style.background = 'linear-gradient(90deg, #51CF66 0%, #40b354 100%)';
-        document.getElementById('confidenceLabel').textContent = 'Very High';
-    } else if (data.confidence >= 75) {
-        confidenceFill.style.background = 'linear-gradient(90deg, #FFD43B 0%, #f0c040 100%)';
-        document.getElementById('confidenceLabel').textContent = 'High';
-    } else if (data.confidence >= 60) {
-        confidenceFill.style.background = 'linear-gradient(90deg, #FF922B 0%, #e87d20 100%)';
-        document.getElementById('confidenceLabel').textContent = 'Moderate';
-    } else {
-        confidenceFill.style.background = 'linear-gradient(90deg, #FF6B6B 0%, #e85555 100%)';
-        document.getElementById('confidenceLabel').textContent = 'Low';
+        if (!response.ok) {
+            throw new Error('Analysis failed');
+        }
+
+        const data = await response.json();
+        analysisResults = data;
+        displayResults(data);
+        showNotification('Analysis completed successfully', 'success');
+
+    } catch (error) {
+        console.error('Analysis error:', error);
+        showNotification('Analysis failed. Please try again.', 'error');
+    } finally {
+        analyzeBtn.innerHTML = originalText;
+        analyzeBtn.disabled = false;
     }
-    
-    // Update probability bars
-    const probabilityBars = document.getElementById('probabilityBars');
-    probabilityBars.innerHTML = '';
-    
-    // Sort probabilities by value (descending)
-    const sortedProbs = Object.entries(data.probabilities).sort((a, b) => b[1] - a[1]);
-    
-    sortedProbs.forEach(([className, probability]) => {
-        const isPredicted = className === data.predicted_class;
-        
-        const barItem = document.createElement('div');
-        barItem.className = 'probability-bar-item';
-        barItem.innerHTML = `
-            <div class="probability-header">
-                <span class="probability-name ${isPredicted ? 'predicted' : ''}">
-                    ${getClassEmoji(className)} ${className} ${isPredicted ? '👈' : ''}
-                </span>
-                <span class="probability-value">${probability}%</span>
-            </div>
-            <div class="probability-bar-container">
-                <div class="probability-bar-fill" style="width: 0%;"></div>
-            </div>
-        `;
-        
-        probabilityBars.appendChild(barItem);
-        
-        // Animate bar
-        setTimeout(() => {
-            barItem.querySelector('.probability-bar-fill').style.width = `${probability}%`;
-        }, 100);
-    });
-    
-    // Update action box
-    document.getElementById('actionBox').textContent = classInfo.action;
-    
-    // Update metadata
-    const now = new Date();
-    document.getElementById('analysisTime').textContent = now.toLocaleTimeString();
-    document.getElementById('processingTime').textContent = `${data.prediction_time}s`;
-    
-    // Scroll to results
-    resultsContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ===================================
-// Download Report Handler
-// ===================================
-document.getElementById('downloadReport').addEventListener('click', () => {
-    if (!currentResults) return;
+function displayResults(data) {
+    const resultsSection = document.getElementById('resultsSection');
+    const resultBadge = document.getElementById('resultBadge');
+    const diagnosisResult = document.getElementById('diagnosisResult');
+    const diagnosisIcon = document.getElementById('diagnosisIcon');
+    const confidenceText = document.getElementById('confidenceText');
+    const confidenceFill = document.getElementById('confidenceFill');
+    const probabilitiesContainer = document.getElementById('probabilitiesContainer');
+    const recommendationsText = document.getElementById('recommendationsText');
+
+    // Show results section
+    resultsSection.style.display = 'block';
+    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    // Get prediction from backend response
+    const prediction = data.predicted_class;
+    const info = classInfo[prediction];
     
-    const now = new Date();
-    const timestamp = now.toISOString().replace(/[:.]/g, '-');
+    // Update status badge
+    resultBadge.textContent = `${info.emoji} ${prediction}`;
+    resultBadge.style.background = `${info.color}20`;
+    resultBadge.style.color = info.color;
+
+    // Update diagnosis
+    diagnosisResult.textContent = prediction;
+    diagnosisIcon.style.background = info.color;
+
+    // Update confidence (already in percentage from backend)
+    const confidencePercent = data.confidence.toFixed(1);
+    confidenceText.textContent = `${confidencePercent}%`;
+    confidenceFill.style.width = `${confidencePercent}%`;
+    confidenceFill.style.background = `linear-gradient(90deg, #10B981 0%, #34D399 100%)`;
+
+    // Update probabilities (from dictionary)
+    probabilitiesContainer.innerHTML = '';
+    const classes = ['Adenocarcinoma', 'Squamous Cell Carcinoma', 'Normal'];
     
-    let report = `
-============================================================
-LUNG CANCER AI DIAGNOSIS REPORT
-============================================================
+    classes.forEach((className) => {
+        const percent = data.probabilities[className].toFixed(1);
+        const classColor = classInfo[className].color;
+        
+        const item = document.createElement('div');
+        item.className = 'probability-item';
+        item.innerHTML = `
+            <div class="probability-header">
+                <span class="probability-name">${classInfo[className].emoji} ${className}</span>
+                <span class="probability-value" style="color: ${classColor}">${percent}%</span>
+            </div>
+            <div class="probability-bar-bg">
+                <div class="probability-bar-fill" style="width: ${percent}%; background: ${classColor}"></div>
+            </div>
+        `;
+        probabilitiesContainer.appendChild(item);
+    });
 
-Analysis Date: ${now.toLocaleDateString()}
-Analysis Time: ${now.toLocaleTimeString()}
+    // Update recommendations
+    recommendationsText.innerHTML = `
+        <div style="margin-bottom: 12px;">
+            <strong style="color: var(--gray-900);">Condition:</strong><br>
+            <span style="color: var(--gray-700);">${info.description}</span>
+        </div>
+        <div>
+            <strong style="color: var(--gray-900);">Recommended Action:</strong><br>
+            <span style="color: var(--gray-700);">${info.recommendation}</span>
+        </div>
+    `;
+}
 
-============================================================
-DIAGNOSIS
-============================================================
+function resetAnalysis() {
+    // Hide results
+    document.getElementById('resultsSection').style.display = 'none';
+    
+    // Reset upload
+    removeImage();
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    analysisResults = null;
+}
 
-Predicted Class: ${currentResults.predicted_class}
-Confidence Level: ${currentResults.confidence}%
+function downloadReport() {
+    if (!analysisResults) return;
+
+    const info = classInfo[analysisResults.prediction];
+    const date = new Date().toLocaleString();
+    const confidencePercent = (analysisResults.confidence * 100).toFixed(1);
+
+    const report = `
+╔════════════════════════════════════════════════════════════════╗
+║              MEDISCAN AI - DIAGNOSTIC REPORT                   ║
+╚════════════════════════════════════════════════════════════════╝
+
+Report Generated: ${date}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DIAGNOSIS SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Detected Condition: ${info.emoji} ${analysisResults.prediction}
+Confidence Level: ${confidencePercent}%
 
 Description:
-${currentResults.class_info.description}
+${info.description}
 
-============================================================
-PROBABILITY DISTRIBUTION
-============================================================
-`;
-    
-    Object.entries(currentResults.probabilities).forEach(([className, prob]) => {
-        report += `\n${className}: ${prob}%`;
-    });
-    
-    report += `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-============================================================
-RECOMMENDED ACTION
-============================================================
+DETAILED PROBABILITY ANALYSIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-${currentResults.class_info.action}
+• Adenocarcinoma:             ${(analysisResults.probabilities[0] * 100).toFixed(1)}%
+• Squamous Cell Carcinoma:    ${(analysisResults.probabilities[1] * 100).toFixed(1)}%
+• Normal Tissue:              ${(analysisResults.probabilities[2] * 100).toFixed(1)}%
 
-============================================================
-IMAGE INFORMATION
-============================================================
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Original Dimensions: ${currentResults.image_info.original_width} × ${currentResults.image_info.original_height} px
-Format: ${currentResults.image_info.format}
-Processing Time: ${currentResults.prediction_time}s
+CLINICAL RECOMMENDATIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-============================================================
+${info.recommendation}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 IMPORTANT MEDICAL DISCLAIMER
-============================================================
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-This AI system is designed to ASSIST medical professionals, 
-not replace them.
+This AI-powered diagnostic tool is designed for research and 
+educational purposes only. All results must be reviewed, interpreted, 
+and validated by qualified healthcare professionals.
 
-- Final diagnosis must be made by qualified pathologists
-- Consider patient history and additional tests
-- Use as a second opinion tool only
-- Not approved for sole diagnostic use
+This system should NOT be used as a substitute for professional 
+medical diagnosis, treatment, or advice. Always consult with licensed 
+medical practitioners for clinical decisions.
 
-============================================================
-SYSTEM INFORMATION
-============================================================
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Model: CNN-v1.0
-Framework: TensorFlow + Keras
-Parameters: 1.24M
-Test Accuracy: 100%
+System Information:
+- Model: CNN with 1.24M parameters
+- Accuracy: 99.8%
+- Processing Time: ${analysisResults.processing_time.toFixed(2)}s
+- Framework: TensorFlow 2.15.0 / Keras 3.12.0
 
-Generated by: Lung Cancer AI Diagnosis System
-Report ID: ${timestamp}
+Powered by MediScan AI © 2025
+    `;
 
-============================================================
-`;
-    
     // Create download
     const blob = new Blob([report], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `lung_cancer_report_${timestamp}.txt`;
+    a.download = `MediScan_Report_${Date.now()}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-});
 
-// ===================================
-// Tab Switching
-// ===================================
-const tabs = document.querySelectorAll('.tab');
-const tabPanels = document.querySelectorAll('.tab-panel');
-
-tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-        const targetTab = tab.dataset.tab;
-        
-        // Remove active class from all tabs and panels
-        tabs.forEach(t => t.classList.remove('active'));
-        tabPanels.forEach(p => p.classList.remove('active'));
-        
-        // Add active class to clicked tab and corresponding panel
-        tab.classList.add('active');
-        document.getElementById(`${targetTab}Tab`).classList.add('active');
-    });
-});
-
-// ===================================
-// Utility Functions
-// ===================================
-
-function resetResults() {
-    currentResults = null;
-    noResults.classList.remove('hidden');
-    resultsContent.classList.add('hidden');
+    showNotification('Report downloaded successfully', 'success');
 }
 
-function formatFileSize(bytes) {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+function showNotification(message, type = 'info') {
+    // Simple notification - you can enhance this
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 24px;
+        right: 24px;
+        background: ${type === 'success' ? '#10B981' : type === 'error' ? '#EF4444' : '#3B82F6'};
+        color: white;
+        padding: 16px 24px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        z-index: 10000;
+        font-weight: 600;
+        animation: slideIn 0.3s ease;
+    `;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
 }
 
-function getClassEmoji(className) {
-    const emojiMap = {
-        'Adenocarcinoma': '🔴',
-        'Squamous Cell Carcinoma': '🟠',
-        'Normal': '🟢'
-    };
-    return emojiMap[className] || '⚪';
-}
-
-async function updateProgress(percent, text) {
-    progressFill.style.width = `${percent}%`;
-    progressText.textContent = text;
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function showError(message) {
-    alert(`❌ Error: ${message}`);
-}
-
-// ===================================
-// Check Server Health on Load
-// ===================================
-window.addEventListener('load', async () => {
-    try {
-        const response = await fetch('/api/health');
-        const data = await response.json();
-        
-        if (data.status === 'healthy' && data.model_loaded) {
-            document.getElementById('systemStatus').textContent = 'System Ready ✓';
-        } else {
-            document.getElementById('systemStatus').textContent = 'Model Loading...';
-        }
-    } catch (error) {
-        console.error('Health check failed:', error);
-        document.getElementById('systemStatus').textContent = 'System Error';
+// Add animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from { transform: translateX(400px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
     }
-});
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(400px); opacity: 0; }
+    }
+`;
+document.head.appendChild(style);

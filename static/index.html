@@ -3,301 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lung Cancer AI Diagnosis System</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="https://img.icons8.com/fluency/96/000000/lungs.png">
+    <title>PulmoScanAI - AI Lung Cancer Diagnosis</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Header -->
-    <header class="main-header">
-        <div class="container">
-            <div class="header-content">
-                <img src="https://img.icons8.com/fluency/96/000000/lungs.png" alt="Lungs Icon" class="header-icon">
-                <div class="header-text">
-                    <h1>Lung Cancer AI Diagnosis System</h1>
-                    <p class="subtitle">Advanced Deep Learning for Histopathological Image Analysis</p>
-                    <p class="powered-by">Powered by Convolutional Neural Networks | Medical Grade AI</p>
-                </div>
-            </div>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="logo">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <path d="M16 2L4 8v12c0 7.73 5.2 14.93 12 16 6.8-1.07 12-8.27 12-16V8L16 2z" fill="#10B981" stroke="#10B981" stroke-width="2"/>
+                <path d="M12 16l3 3 6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="logo-text">PulmoScanAI</span>
         </div>
-    </header>
+        
+        <nav class="nav-menu">
+            <a href="#" class="nav-item active">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span>Analysis History</span>
+            </a>
+            <a href="#" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                <span>Reports</span>
+                <span class="badge">12</span>
+            </a>
+            <a href="#" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <span>Help</span>
+            </a>
+        </nav>
+        
+        <div class="nav-bottom">
+            <a href="#" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m-2 2l-4.2 4.2m13.2-5.2l-4.2-4.2m-2 2l-4.2-4.2"></path>
+                </svg>
+                <span>Settings</span>
+            </a>
+        </div>
+    </div>
 
     <!-- Main Content -->
-    <main class="container">
-        <!-- System Status -->
-        <div class="status-bar">
-            <div class="status-indicator">
-                <span class="status-dot active"></span>
-                <span id="systemStatus">System Ready</span>
+    <div class="main-content">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="search-bar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" placeholder="Search patients or reports...">
             </div>
-            <div class="model-info">
-                <span>🤖 Model: CNN-v1.0</span>
-                <span>📊 Accuracy: 100%</span>
-                <span>⚡ Ready</span>
+            
+            <div class="header-actions">
+                <button class="icon-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span class="notification-dot"></span>
+                </button>
+                <button class="icon-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m-2 2l-4.2 4.2m13.2-5.2l-4.2-4.2m-2 2l-4.2-4.2"></path>
+                    </svg>
+                </button>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Doctor+AI&background=10B981&color=fff" alt="Profile">
+                </div>
+            </div>
+        </header>
+
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <div class="welcome-text">
+                <h1>Welcome Doctor!</h1>
+                <p>AI-Powered Histopathological Analysis Platform</p>
+            </div>
+            <button class="primary-btn" onclick="document.getElementById('imageInput').click()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14m-7-7h14"></path>
+                </svg>
+                New Analysis
+            </button>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="12" y1="18" x2="12" y2="12"></line>
+                        <line x1="9" y1="15" x2="15" y2="15"></line>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Total Analysis</p>
+                    <h3 class="stat-value">1,247</h3>
+                    <span class="stat-change positive">↑ 12.5%</span>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Accuracy Rate</p>
+                    <h3 class="stat-value">99.8%</h3>
+                    <span class="stat-change positive">↑ 0.3%</span>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Avg. Processing Time</p>
+                    <h3 class="stat-value">1.8s</h3>
+                    <span class="stat-change positive">↓ 0.2s</span>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="8.5" cy="7" r="4"></circle>
+                        <polyline points="17 11 19 13 23 9"></polyline>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Patients Screened</p>
+                    <h3 class="stat-value">856</h3>
+                    <span class="stat-change positive">↑ 8.2%</span>
+                </div>
             </div>
         </div>
 
-        <!-- Analysis Section -->
-        <div class="analysis-section">
-            <!-- Left Panel - Upload -->
-            <div class="panel upload-panel">
-                <h2>📤 Image Upload</h2>
-                
-                <div class="upload-zone" id="uploadZone">
-                    <div class="upload-content">
-                        <div class="upload-icon">📁</div>
-                        <h3>Drag & Drop Image Here</h3>
-                        <p>or</p>
-                        <label for="fileInput" class="upload-button">
-                            Choose File
-                        </label>
-                        <input type="file" id="fileInput" accept="image/*" hidden>
-                        <p class="upload-hint">Supported: PNG, JPG, JPEG, WEBP</p>
-                    </div>
+        <!-- Main Analysis Section -->
+        <div class="analysis-container">
+            <div class="upload-card">
+                <div class="card-header">
+                    <h2>New Analysis</h2>
+                    <span class="status-badge">Ready</span>
                 </div>
-
-                <!-- Image Preview -->
-                <div id="imagePreview" class="image-preview hidden">
-                    <div class="preview-header">
-                        <h3>📷 Uploaded Image</h3>
-                        <button id="clearImage" class="clear-button">✕ Clear</button>
+                
+                <div class="upload-area" id="uploadBox">
+                    <div class="upload-icon-wrapper">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="1.5">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
                     </div>
-                    <img id="previewImg" src="" alt="Preview">
-                    <div class="image-details">
-                        <div class="detail-item">
-                            <span class="detail-label">Filename:</span>
-                            <span id="fileName">-</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Size:</span>
-                            <span id="fileSize">-</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Dimensions:</span>
-                            <span id="fileDimensions">-</span>
-                        </div>
-                    </div>
-                    <button id="analyzeButton" class="analyze-button">
-                        🔬 Start AI Analysis
+                    <h3>Upload Histopathological Image</h3>
+                    <p>Drag and drop your image here, or click to browse</p>
+                    <p class="upload-specs">Supports: JPG, PNG, JPEG • Max size: 10MB</p>
+                    <input type="file" id="imageInput" accept="image/*" hidden>
+                    <button class="upload-btn" onclick="document.getElementById('imageInput').click()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Choose File
                     </button>
                 </div>
-
-                <!-- Progress -->
-                <div id="progressSection" class="progress-section hidden">
-                    <div class="progress-bar">
-                        <div id="progressFill" class="progress-fill"></div>
+                
+                <div class="preview-container" id="previewSection" style="display: none;">
+                    <div class="image-preview-wrapper">
+                        <img id="imagePreview" alt="Preview">
+                        <button class="remove-image" onclick="removeImage()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
                     </div>
-                    <p id="progressText" class="progress-text">Initializing...</p>
+                    <button class="analyze-btn" id="analyzeBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        Start AI Analysis
+                    </button>
                 </div>
             </div>
 
-            <!-- Right Panel - Results -->
-            <div class="panel results-panel">
-                <h2>📊 Analysis Results</h2>
-                
-                <div id="noResults" class="no-results">
-                    <div class="placeholder-icon">🔬</div>
-                    <h3>No Analysis Yet</h3>
-                    <p>Upload a histopathological image and click "Start AI Analysis" to see results</p>
-                    
-                    <div class="info-box">
-                        <h4>🎯 What to Expect:</h4>
-                        <ul>
-                            <li>✅ Instant AI-powered analysis</li>
-                            <li>📊 Detailed probability breakdown</li>
-                            <li>💡 Recommended medical actions</li>
-                            <li>📄 Downloadable diagnostic report</li>
-                        </ul>
-                    </div>
+            <div class="results-card" id="resultsSection" style="display: none;">
+                <div class="card-header">
+                    <h2>Analysis Results</h2>
+                    <div class="result-status" id="resultBadge"></div>
                 </div>
-
-                <div id="resultsContent" class="results-content hidden">
-                    <!-- Diagnosis Card -->
-                    <div id="diagnosisCard" class="diagnosis-card">
+                
+                <div class="results-content">
+                    <div class="diagnosis-section">
                         <div class="diagnosis-header">
-                            <span id="diagnosisEmoji" class="diagnosis-emoji">🔴</span>
-                            <h3 id="diagnosisClass">-</h3>
+                            <div class="diagnosis-icon" id="diagnosisIcon">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="diagnosis-label">Detected Condition</p>
+                                <h2 class="diagnosis-value" id="diagnosisResult"></h2>
+                            </div>
                         </div>
-                        <p id="diagnosisDescription" class="diagnosis-description">-</p>
-                        <div class="confidence-badge">
-                            <span>Confidence: </span>
-                            <span id="confidenceValue" class="confidence-value">-</span>
-                        </div>
-                    </div>
-
-                    <!-- Confidence Meter -->
-                    <div class="confidence-section">
-                        <h4>📈 Confidence Level</h4>
-                        <div class="confidence-meter">
-                            <div id="confidenceFill" class="confidence-fill"></div>
-                        </div>
-                        <div class="confidence-labels">
-                            <span>0%</span>
-                            <span id="confidenceLabel" class="confidence-label">-</span>
-                            <span>100%</span>
-                        </div>
-                    </div>
-
-                    <!-- Probability Distribution -->
-                    <div class="probability-section">
-                        <h4>📋 Probability Distribution</h4>
-                        <div id="probabilityBars" class="probability-bars">
-                            <!-- Dynamically populated -->
+                        
+                        <div class="confidence-section">
+                            <div class="confidence-header">
+                                <span>Confidence Level</span>
+                                <span class="confidence-percentage" id="confidenceText"></span>
+                            </div>
+                            <div class="confidence-bar-wrapper">
+                                <div class="confidence-bar-fill" id="confidenceFill"></div>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Recommended Action -->
-                    <div class="action-section">
-                        <h4>💡 Recommended Action</h4>
-                        <div id="actionBox" class="action-box">-</div>
-                    </div>
-
-                    <!-- Medical Disclaimer -->
-                    <div class="disclaimer">
-                        <h4>⚠️ Important Medical Disclaimer</h4>
-                        <p>This AI system is designed to <strong>assist</strong> medical professionals, not replace them.</p>
-                        <ul>
-                            <li>Final diagnosis must be made by qualified pathologists</li>
-                            <li>Consider patient history and additional tests</li>
-                            <li>Use as a second opinion tool only</li>
-                            <li>Not approved for sole diagnostic use</li>
-                        </ul>
-                    </div>
-
-                    <!-- Download Report -->
-                    <button id="downloadReport" class="download-button">
-                        📄 Download Report
-                    </button>
-
-                    <!-- Analysis Metadata -->
-                    <div class="metadata">
-                        <small>
-                            <strong>Analysis Time:</strong> <span id="analysisTime">-</span> |
-                            <strong>Processing Time:</strong> <span id="processingTime">-</span>
-                        </small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Info Tabs -->
-        <div class="tabs-section">
-            <div class="tabs">
-                <button class="tab active" data-tab="about">About</button>
-                <button class="tab" data-tab="model">Model Info</button>
-                <button class="tab" data-tab="classes">Classification</button>
-            </div>
-
-            <div class="tab-content">
-                <!-- About Tab -->
-                <div id="aboutTab" class="tab-panel active">
-                    <h3>🧠 AI Technology</h3>
-                    <p>This system uses a <strong>Convolutional Neural Network (CNN)</strong> trained on 15,000 histopathological images to classify lung tissue samples.</p>
                     
-                    <div class="feature-grid">
-                        <div class="feature-card">
-                            <div class="feature-icon">🎯</div>
-                            <h4>100% Accuracy</h4>
-                            <p>Perfect classification on test dataset</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">⚡</div>
-                            <h4>Instant Results</h4>
-                            <p>Analysis completed in seconds</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">🔒</div>
-                            <h4>Secure & Private</h4>
-                            <p>Images processed locally</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">🏥</div>
-                            <h4>Medical Grade</h4>
-                            <p>Research-validated model</p>
-                        </div>
+                    <div class="probabilities-section">
+                        <h3>Detailed Probability Distribution</h3>
+                        <div class="probability-bars" id="probabilitiesContainer"></div>
                     </div>
-                </div>
-
-                <!-- Model Tab -->
-                <div id="modelTab" class="tab-panel">
-                    <h3>📊 Model Specifications</h3>
-                    <div class="specs-grid">
-                        <div class="spec-item">
-                            <strong>Architecture:</strong> Custom CNN with BatchNorm
+                    
+                    <div class="recommendations-section">
+                        <div class="recommendation-header">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                                <path d="M2 17l10 5 10-5"></path>
+                                <path d="M2 12l10 5 10-5"></path>
+                            </svg>
+                            <h3>Clinical Recommendations</h3>
                         </div>
-                        <div class="spec-item">
-                            <strong>Training Images:</strong> 15,000 (5,000 per class)
-                        </div>
-                        <div class="spec-item">
-                            <strong>Test Accuracy:</strong> 100%
-                        </div>
-                        <div class="spec-item">
-                            <strong>Parameters:</strong> 1.24 million
-                        </div>
-                        <div class="spec-item">
-                            <strong>Input Size:</strong> 150×150 pixels
-                        </div>
-                        <div class="spec-item">
-                            <strong>Framework:</strong> TensorFlow + Keras 3.x
-                        </div>
+                        <div class="recommendation-content" id="recommendationsText"></div>
                     </div>
-                </div>
-
-                <!-- Classes Tab -->
-                <div id="classesTab" class="tab-panel">
-                    <h3>🎯 Classification Categories</h3>
-                    <div class="classes-grid">
-                        <div class="class-card adenocarcinoma">
-                            <div class="class-header">
-                                <span class="class-emoji">🔴</span>
-                                <h4>Adenocarcinoma</h4>
-                            </div>
-                            <p>A type of non-small cell lung cancer that begins in mucus-secreting cells.</p>
-                            <div class="class-action">
-                                <strong>Action:</strong> Immediate consultation with oncologist recommended.
-                            </div>
-                        </div>
-                        <div class="class-card squamous">
-                            <div class="class-header">
-                                <span class="class-emoji">🟠</span>
-                                <h4>Squamous Cell Carcinoma</h4>
-                            </div>
-                            <p>A type of non-small cell lung cancer that begins in flat cells lining the airways.</p>
-                            <div class="class-action">
-                                <strong>Action:</strong> Immediate consultation with oncologist recommended.
-                            </div>
-                        </div>
-                        <div class="class-card normal">
-                            <div class="class-header">
-                                <span class="class-emoji">🟢</span>
-                                <h4>Normal</h4>
-                            </div>
-                            <p>Healthy lung tissue with no signs of malignancy.</p>
-                            <div class="class-action">
-                                <strong>Action:</strong> No immediate action required. Continue regular monitoring.
-                            </div>
-                        </div>
+                    
+                    <div class="action-buttons">
+                        <button class="secondary-btn" onclick="resetAnalysis()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="1 4 1 10 7 10"></polyline>
+                                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                            </svg>
+                            New Analysis
+                        </button>
+                        <button class="primary-btn" id="downloadBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            Download Report
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <h3>🫁 Lung Cancer AI Diagnosis System</h3>
-            <p>Powered by Deep Learning | TensorFlow + Keras</p>
-            <div class="footer-badges">
-                <span class="badge">🔒 Secure</span>
-                <span class="badge">🚀 Fast</span>
-                <span class="badge">🎯 Accurate</span>
-                <span class="badge">💯 Reliable</span>
+        <!-- Medical Disclaimer -->
+        <div class="disclaimer-card">
+            <div class="disclaimer-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
             </div>
-            <p class="footer-note">For research and educational purposes only | Version 1.0.0</p>
+            <div class="disclaimer-content">
+                <h3>Important Medical Disclaimer</h3>
+                <p>This AI-powered diagnostic tool is designed for research and educational purposes only. All results must be reviewed, interpreted, and validated by qualified healthcare professionals. This system should not be used as a substitute for professional medical diagnosis, treatment, or advice. Always consult with licensed medical practitioners for clinical decisions.</p>
+            </div>
         </div>
-    </footer>
-
-    <script src="script.js"></script>
+    </div>
+    
+    <script src="/script.js"></script>
 </body>
 </html>
