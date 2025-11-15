@@ -28,7 +28,7 @@ st.set_page_config(
 )
 
 # Configuration
-MODEL_PATH = 'best_lung_model_v2.h5'  # Keras 3.x compatible version
+MODEL_PATH = 'best_lung_model.h5'  # Keras 3.x compatible version
 IMG_SIZE = (150, 150)  # Model expects 150x150x3 input
 CLASS_NAMES = ['Adenocarcinoma', 'Normal', 'Squamous Cell Carcinoma']
 
@@ -141,10 +141,10 @@ def load_model():
             print(f"   ⚠️ Model file not found locally. Downloading from GitHub...")
             
             # GitHub raw URL for the model file
-            model_url = "https://github.com/AyushmanGupta21/lung-cancer-classification/raw/main/best_lung_model_v2.h5"
+            model_url = "https://github.com/AyushmanGupta21/lung-cancer-classification/raw/main/best_lung_model.h5"
             
             try:
-                print(f"   📥 Downloading model (15.1 MB)... This may take 30-60 seconds...")
+                print(f"   📥 Downloading model (14.4 MB)... This may take 30-60 seconds...")
                 urllib.request.urlretrieve(model_url, MODEL_PATH)
                 print(f"   ✓ Model downloaded successfully!")
             except Exception as download_error:
